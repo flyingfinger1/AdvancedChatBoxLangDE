@@ -1,0 +1,67 @@
+plugins {
+    id 'net.fabricmc.fabric-loom' version '1.17.12'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+def javaVersion = JavaVersion.toVersion(project.javaVersion)
+
+repositories {
+    // AdvancedChatBox, published locally with `publishToMavenLocal`.
+    mavenLocal()
+    mavenCentral()
+    maven { name = 'FabricMC'; url = 'https://maven.fabricmc.net/' }
+}
+
+dependencies {
+    // 26.x ships unobfuscated — no Yarn/Mojang mappings, Loom does not remap.
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    // AdvancedChatBox provides the SpellCheckLanguageProvider API and the LanguageTool engine at
+    // runtime; compile against it only (transitive=false so we don't try to resolve its minecraft dep).
+    compileOnly("io.github.darkkronicle:AdvancedChatBox:${project.box_version}") { transitive = false }
+    compileOnly "org.languagetool:languagetool-core:${project.languagetool_version}"
+
+    // The German language data — bundled here (jar-in-jar). language-de keeps its POS dictionary and a
+    // few helpers in SEPARATE artifacts (german-pos-dict holds german.dict, jwordsplitter, openregex),
+    // so bundle those too. The shared engine (languagetool-core, morfologik) comes from Box; guava and
+    // commons-lang3 come from Minecraft.
+    implementation "org.languagetool:language-de:${project.languagetool_version}"
+    include("org.languagetool:language-de:${project.languagetool_version}") { transitive = false }
+    // German-specific transitives of language-de that Box (core, morfologik, segment, hppc, trove4j)
+    // and Minecraft (guava, commons-lang3, jsr305) do NOT provide:
+    include "de.danielnaber:german-pos-dict:1.2.2"
+    include "de.danielnaber:jwordsplitter:4.5"
+    include "edu.washington.cs.knowitall:openregex:1.1.1"
+    include "com.hankcs:aho-corasick-double-array-trie:1.2.2"
+    include "io.prometheus:simpleclient_guava:0.10.0"
+}
+
+processResources {
+    inputs.property 'version', project.version
+
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = 'UTF-8'
+    it.options.release = Integer.parseInt(project.javaVersion)
+}
+
+java {
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+}
+
+jar {
+    from 'LICENSE.txt'
+}

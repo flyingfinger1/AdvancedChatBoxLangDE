@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "advancedchatbox-lang-de",
+  "version": "${version}",
+  "name": "AdvancedChatBox Language: Deutsch",
+  "description": "German (de_de) spell-check dictionary for AdvancedChatBox. Add-on that plugs into AdvancedChatBox's spell-check engine via the advancedchatbox:spellcheck entrypoint.",
+  "authors": [ "flyingfinger1" ],
+  "contributors": [ "DarkKronicle" ],
+  "contact": {
+    "sources": "https://github.com/flyingfinger1/AdvancedChatBoxLangDE"
+  },
+  "license": "MPL-2.0",
+  "environment": "client",
+  "entrypoints": {
+    "advancedchatbox:spellcheck": [
+      "io.github.flyingfinger1.advancedchatbox.lang.de.GermanProvider"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.0",
+    "minecraft": ">=26.3 <26.4",
+    "java": ">=25",
+    "advancedchatbox": "*"
+  }
+}
