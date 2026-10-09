@@ -3,9 +3,14 @@
   "id": "advancedchatbox-lang-de",
   "version": "${version}",
   "name": "AdvancedChatBox Language: Deutsch",
+  "icon": "assets/advancedchatbox-lang-de/icon.png",
   "description": "German (de_de) spell-check dictionary for AdvancedChatBox. Add-on that plugs into AdvancedChatBox's spell-check engine via the advancedchatbox:spellcheck entrypoint.",
-  "authors": [ "flyingfinger1" ],
-  "contributors": [ "DarkKronicle" ],
+  "authors": [
+    "flyingfinger1"
+  ],
+  "contributors": [
+    "DarkKronicle"
+  ],
   "contact": {
     "sources": "https://github.com/flyingfinger1/AdvancedChatBoxLangDE"
   },
